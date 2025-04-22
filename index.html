@@ -1,1 +1,99 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #013220; /* Dark green */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .summary-line {
+      font-size: 4vw;
+      margin: 0.3em 0;
+    }
+
+    #countdown {
+      font-size: 7vw;
+      margin-top: 1em;
+    }
+
+    @media (min-width: 768px) {
+      .summary-line {
+        font-size: 2vw;
+      }
+      #countdown {
+        font-size: 4vw;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .summary-line {
+        font-size: 1.5vw;
+      }
+      #countdown {
+        font-size: 3vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <div class="summary-line" id="months-line"></div>
+    <div class="summary-line" id="weeks-line"></div>
+    <div class="summary-line" id="days-line"></div>
+  </div>
+  <div id="countdown">--:--:--</div>
+
+  <script>
+    // SET YOUR TARGET DATE HERE
+    const targetDate = new Date("2025-07-13T00:00:00");
+
+    function pluralize(value, word) {
+      return `${value} ${word}${value !== 1 ? 's' : ''}`;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      let diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('months-line').textContent = "";
+        document.getElementById('weeks-line').textContent = "";
+        document.getElementById('days-line').textContent = "The countdown has ended!";
+        document.getElementById('countdown').textContent = "00:00:00";
+        return;
+      }
+
+      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const months = Math.floor(totalDays / 30); // Approximate months
+      const remainingDaysAfterMonths = totalDays % 30;
+      const weeks = Math.floor(remainingDaysAfterMonths / 7);
+      const days = remainingDaysAfterMonths % 7;
+
+      const hours = String(Math.floor(diff / (1000 * 60 * 60) % 24)).padStart(2, '0');
+      const minutes = String(Math.floor(diff / (1000 * 60) % 60)).padStart(2, '0');
+      const seconds = String(Math.floor(diff / 1000 % 60)).padStart(2, '0');
+
+      document.getElementById('months-line').textContent = pluralize(months, 'month');
+      document.getElementById('weeks-line').textContent = pluralize(weeks, 'week');
+      document.getElementById('days-line').textContent = pluralize(days, 'day');
+      document.getElementById('countdown').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Initial call
+  </script>
+</body>
+</html>
