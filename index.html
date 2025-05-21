@@ -51,13 +51,19 @@
 <body>
   <div id="summary">
     <div class="summary-line" id="months-line"></div>
+    <span>OR</span>
     <div class="summary-line" id="weeks-line"></div>
+    <span>OR</span>
     <div class="summary-line" id="days-line"></div>
+    <span>OR</span>
+    <div class="summary-line" id="hours-line"></div>
+    <span>OR</span>
+    <div class="summary-line" id="minutes-line"></div>
+    <span>OR</span>
+    <div class="summary-line" id="seconds-line"></div>
   </div>
-  <div id="countdown">--:--:--</div>
 
   <script>
-    // SET YOUR TARGET DATE HERE
     const targetDate = new Date("2025-07-13T00:00:00");
 
     function pluralize(value, word) {
@@ -69,29 +75,30 @@
       let diff = targetDate - now;
 
       if (diff <= 0) {
-        document.getElementById('months-line').textContent = "";
-        document.getElementById('weeks-line').textContent = "";
+        document.getElementById('months-line').textContent = "The countdown has ended!";
+        document.getElementById('weeks-line').textContent = "The countdown has ended!";
         document.getElementById('days-line').textContent = "The countdown has ended!";
-        document.getElementById('countdown').textContent = "00:00:00";
+        document.getElementById('hours-line').textContent = "The countdown has ended!";
+        document.getElementById('minutes-line').textContent = "The countdown has ended!";
+        document.getElementById('seconds-line').textContent = "The countdown has ended!";
         return;
       }
 
-      const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const months = Math.floor(totalDays / 30); // Approximate months
-      const remainingDaysAfterMonths = totalDays % 30;
-      const weeks = Math.floor(remainingDaysAfterMonths / 7);
-      const days = remainingDaysAfterMonths % 7;
+      const days = diff / (1000 * 60 * 60 * 24);
+      const months = days / 30;
+      const weeks = days /7;
 
-      const hours = String(Math.floor(diff / (1000 * 60 * 60) % 24)).padStart(2, '0');
-      const minutes = String(Math.floor(diff / (1000 * 60) % 60)).padStart(2, '0');
-      const seconds = String(Math.floor(diff / 1000 % 60)).padStart(2, '0');
+      const hours = diff / (1000 * 60 * 60);
+      const minutes = diff / (1000 * 60);
+      const seconds = diff / 1000;
 
-      document.getElementById('months-line').textContent = pluralize(months, 'month');
-      document.getElementById('weeks-line').textContent = pluralize(weeks, 'week');
-      document.getElementById('days-line').textContent = pluralize(days, 'day');
-      document.getElementById('countdown').textContent = `${hours}:${minutes}:${seconds}`;
+      document.getElementById('months-line').textContent = pluralize(months.toFixed(2), 'month');
+      document.getElementById('weeks-line').textContent = pluralize(weeks.toFixed(2), 'week');
+      document.getElementById('days-line').textContent = pluralize(days.toFixed(2), 'day');
+      document.getElementById('hours-line').textContent = pluralize(hours.toFixed(2), 'hour');
+	  document.getElementById('minutes-line').textContent = pluralize(minutes.toFixed(2), 'minute');
+	  document.getElementById('seconds-line').textContent = pluralize(seconds.toFixed(0), 'second');
     }
-
     setInterval(updateCountdown, 1000);
     updateCountdown(); // Initial call
   </script>
